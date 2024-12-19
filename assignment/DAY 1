@@ -1,1 +1,147 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <algorithm> // Make sure to include this for std::transform
 
+using namespace std;
+
+class Item {
+public:
+    int id;
+    string name;
+    string category;
+    int quantity;
+    int reorderLevel;
+
+    Item(int id, string name, string category, int quantity, int reorderLevel) :
+        id(id), name(name), category(category), quantity(quantity), reorderLevel(reorderLevel) {}
+
+    void display() const {
+        cout << "ID: " << id << ", Name: " << name << ", Category: " << category
+             << ", Quantity: " << quantity << ", Reorder Level: " << reorderLevel << endl;
+    }
+};
+
+vector<Item> inventory;
+
+// Function to convert string to lowercase for case-insensitive search
+string toLower(string str) {
+    transform(str.begin(), str.end(), str.begin(), ::tolower);
+    return str;
+}
+
+void addItem() {
+    int id, quantity, reorderLevel;
+    string name, category;
+
+    cout << "Enter Item ID: ";
+    cin >> id;
+    cout << "Enter Item Name: ";
+    cin.ignore(); // Consume newline left by previous cin
+    getline(cin, name);
+    cout << "Enter Item Category: ";
+    getline(cin, category);
+    cout << "Enter Quantity: ";
+    cin >> quantity;
+    cout << "Enter Reorder Level: ";
+    cin >> reorderLevel;
+
+    inventory.push_back(Item(id, name, category, quantity, reorderLevel));
+    cout << "Item added successfully." << endl;
+}
+
+void updateStock() {
+    int id, quantityChange;
+    cout << "Enter Item ID to update stock: ";
+    cin >> id;
+
+    for (auto& item : inventory) {
+        if (item.id == id) {
+            cout << "Enter quantity change (positive for addition, negative for removal): ";
+            cin >> quantityChange;
+            item.quantity += quantityChange;
+            cout << "Stock updated. New quantity: " << item.quantity << endl;
+            if (item.quantity < item.reorderLevel) {
+                cout << "Warning: Stock below reorder level for " << item.name << endl;
+            }
+            return;
+        }
+    }
+    cout << "Item not found." << endl;
+}
+
+void viewInventory() {
+    if (inventory.empty()) {
+        cout << "Inventory is empty." << endl;
+        return;
+    }
+    for (const auto& item : inventory) {
+        item.display();
+    }
+}
+
+void searchItem() {
+    string searchTerm;
+    int searchType;
+
+    cout << "Search by (1) Name or (2) Category? ";
+    cin >> searchType;
+    cin.ignore();
+    cout << "Enter search term: ";
+    getline(cin, searchTerm);
+
+    bool found = false;
+    for (const auto& item : inventory) {
+        if ((searchType == 1 && toLower(item.name).find(toLower(searchTerm)) != string::npos) ||
+            (searchType == 2 && toLower(item.category).find(toLower(searchTerm)) != string::npos)) {
+            item.display();
+            found = true;
+        }
+    }
+
+    if (!found) {
+        cout << "No matching items found." << endl;
+    }
+}
+
+void exportInventory() {
+    ofstream outputFile("inventory.txt");
+    if (outputFile.is_open()) {
+        for (const auto& item : inventory) {
+            outputFile << item.id << "," << item.name << "," << item.category << ","
+                       << item.quantity << "," << item.reorderLevel << endl;
+        }
+        outputFile.close();
+        cout << "Inventory exported to inventory.txt" << endl;
+    } else {
+        cout << "Error opening file for export." << endl;
+    }
+}
+
+int main() {
+    int choice;
+    do {
+        cout << "\nWarehouse Inventory Management System\n";
+        cout << "1. Add Item\n";
+        cout << "2. Update Stock\n";
+        cout << "3. View Inventory\n";
+        cout << "4. Search Item\n";
+        cout << "5. Export Inventory\n";
+        cout << "0. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: addItem(); break;
+            case 2: updateStock(); break;
+            case 3: viewInventory(); break;
+            case 4: searchItem(); break;
+            case 5: exportInventory(); break;
+            case 0: cout << "Exiting program.\n"; break;
+            default: cout << "Invalid choice. Please try again.\n";
+        }
+    } while (choice != 0);
+
+    return 0;
+}
