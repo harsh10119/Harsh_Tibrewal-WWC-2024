@@ -1,0 +1,49 @@
+#include <iostream>
+using namespace std;
+
+int main(){
+    char name;
+    string uid;
+    string section;
+    char aoi;
+    int age;
+    int cgpa;
+    string dob;
+    char hometown;
+
+    cout<<"enter your name"<<endl;
+    cin>>name;
+
+    cout<<"enter your uid"<<endl;
+    cin>>uid;
+
+    cout<<"enter your section"<<endl;
+    cin>>section;
+
+    cout<<"enter your area of interest"<<endl;
+    cin>>aoi;
+
+    cout<<"enter your age"<<endl;
+    cin>>age; 
+
+    cout<<"enter your cgpa"<<endl;
+    cin>>cgpa;
+
+    cout<<"enter your Date of birth"<<endl;
+    cin>>dob;
+    cout<<"enter your Home town"<<endl;
+    cin>>hometown;
+
+
+    cout<<name<<endl;
+    cout<<uid<<endl;
+    cout<<section<<endl;
+    cout<<aoi<<endl;
+    cout<<age<<endl;
+    cout<<cgpa<<endl;
+    cout<<dob<<endl;
+    cout<<hometown<<endl;
+
+    return 0;
+
+}
