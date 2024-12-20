@@ -1,3 +1,68 @@
+Procedure for the Inventory Management System Code
+This procedure explains how the code functions step by step and how each part works together:
+
+1. Class Definition
+InventoryItem Class:
+Represents an individual inventory item with properties like itemID, name, category, quantity, and reorderLevel.
+Constructor initializes these properties.
+display method prints the item's details.
+2. Inventory Management System Class
+InventoryManagementSystem Class:
+Manages the inventory using a std::vector of InventoryItem objects.
+Includes methods for various operations:
+addItem: Adds a new item to the inventory.
+updateStock: Updates the stock quantity of an existing item.
+viewInventory: Displays the current inventory and alerts if stock is below the reorder level.
+searchItem: Searches for an item by name and displays its details if found.
+exportInventory: Exports inventory data to a file named inventory_report.txt.
+3. Adding an Item
+Prompts the user for:
+Item ID, Item Name, Category, Quantity, and Reorder Level.
+Creates a new InventoryItem object using the provided data.
+Adds the object to the inventory vector using emplace_back.
+4. Updating Stock
+Prompts the user to enter the Item ID of the item to update.
+Iterates through the inventory vector to find the matching item.
+If found, updates the quantity with the user-provided value.
+If not found, notifies the user.
+5. Viewing Inventory
+Iterates through all items in the inventory vector and calls their display method.
+Checks if any item’s quantity is below the reorderLevel and displays an alert for such items.
+6. Searching for an Item
+Prompts the user to enter an Item Name to search.
+Traverses the inventory vector to find a matching item by name.
+If found, displays the item’s details using the display method.
+If not found, notifies the user.
+7. Exporting Inventory
+Opens a file named inventory_report.txt in write mode.
+Iterates through the inventory vector and writes each item’s details (comma-separated) into the file.
+Closes the file and notifies the user about successful export.
+If the file cannot be opened, displays an error message.
+8. Menu Functionality
+menu Method:
+Displays a menu with options:
+1: Add Item
+2: Update Stock
+3: View Inventory
+4: Search Item
+5: Export Inventory
+6: Exit
+Takes user input and calls the respective method based on the choice.
+Runs in a loop until the user selects option 6 (Exit).
+9. Main Function
+Creates an instance of InventoryManagementSystem.
+Calls the menu method to start the application.
+Execution Flow
+Run the Program:
+The menu is displayed.
+User Interacts with the Menu:
+Based on the user's choice, the program performs the corresponding operation:
+Add, Update, View, Search, Export, or Exit.
+Repeat Until Exit:
+The loop continues until the user selects option 6 (Exit).
+
+// CODE 
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -145,3 +210,118 @@ int main() {
 
     return 0;
 }
+
+//OUTPUT
+
+1. Add Item:
+
+Warehouse Inventory Management System
+1. Add Item
+... (menu)
+Enter your choice: 1
+Enter Item ID: 123
+Enter Item Name: Laptop
+Enter Item Category: Electronics
+Enter Quantity: 50
+Enter Reorder Level: 10
+Item added successfully.
+
+2.0 Flash Experimental. Might not work as expected.
+Okay, here's a breakdown of the expected output for each case in the provided C++ inventory management system, along with example interactions:
+
+1. Add Item:
+
+Warehouse Inventory Management System
+1. Add Item
+... (menu)
+Enter your choice: 1
+Enter Item ID: 123
+Enter Item Name: Laptop
+Enter Item Category: Electronics
+Enter Quantity: 50
+Enter Reorder Level: 10
+Item added successfully.
+
+2. UPDATE ITEMS
+... (menu)
+Enter your choice: 2
+Enter Item ID to update stock: 123
+Enter quantity change (positive for addition, negative for removal): 20
+Stock updated. New quantity: 70
+
+3.Removing Stock (and Reorder Warning):
+... (menu)
+Enter your choice: 2
+Enter Item ID to update stock: 123
+Enter quantity change (positive for addition, negative for removal): -65
+Stock updated. New quantity: 5
+Warning: Stock below reorder level for Laptop
+
+2.0 Flash Experimental. Might not work as expected.
+Okay, here's a breakdown of the expected output for each case in the provided C++ inventory management system, along with example interactions:
+
+1. Add Item:
+
+Warehouse Inventory Management System
+1. Add Item
+... (menu)
+Enter your choice: 1
+Enter Item ID: 123
+Enter Item Name: Laptop
+Enter Item Category: Electronics
+Enter Quantity: 50
+Enter Reorder Level: 10
+Item added successfully.
+
+Warehouse Inventory Management System
+1. Add Item
+... (menu)
+Enter your choice: 1
+Enter Item ID: 456
+Enter Item Name: Notebook
+Enter Item Category: Stationery
+Enter Quantity: 100
+Enter Reorder Level: 25
+Item added successfully.
+
+2. Update Stock:
+
+Adding Stock:
+Warehouse Inventory Management System
+1. Add Item
+... (menu)
+Enter your choice: 2
+Enter Item ID to update stock: 123
+Enter quantity change (positive for addition, negative for removal): 20
+Stock updated. New quantity: 70
+Removing Stock (and Reorder Warning):
+
+3. View Inventory:
+... (menu)
+Enter your choice: 3
+ID: 123, Name: Laptop, Category: Electronics, Quantity: 5, Reorder Level: 10
+ID: 456, Name: Notebook, Category: Stationery, Quantity: 100, Reorder Level: 25
+
+Empty Inventory:
+Warehouse Inventory Management System
+1. Add Item
+... (menu)
+Enter your choice: 3
+Inventory is empty.
+4. Search Item:
+
+Search by Name (Case-Insensitive):
+
+... (menu)
+Enter your choice: 4
+Search by (1) Name or (2) Category? 1
+Enter search term: lapTop
+ID: 123, Name: Laptop, Category: Electronics, Quantity: 5, Reorder Level: 10
+
+Search by Category:
+
+... (menu)
+Enter your choice: 4
+Search by (1) Name or (2) Category? 2
+Enter search term: Stationery
+ID: 456, Name: Notebook, Category: Stationery, Quantity: 100, Reorder Level: 25
