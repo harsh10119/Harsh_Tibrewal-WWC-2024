@@ -1,0 +1,56 @@
+
+Q1: Convert Sorted Array to Binary Search Tree
+Given an integer array nums where the elements are sorted in ascending order, convert it to a height-balanced binary search tree.
+
+//CODE
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+};
+
+// Function to convert sorted array to BST
+TreeNode* sortedArrayToBST(vector<int>& nums, int left, int right) {
+    if (left > right) {
+        return nullptr; // Base case: no elements to form a tree
+    }
+
+    int mid = left + (right - left) / 2; // Find the middle index
+    TreeNode* root = new TreeNode(nums[mid]); // Create a node with the middle element
+
+    // Recursively build the left and right subtrees
+    root->left = sortedArrayToBST(nums, left, mid - 1); // Left half
+    root->right = sortedArrayToBST(nums, mid + 1, right); // Right half
+
+    return root;
+}
+
+// Helper function to print the tree (in-order traversal)
+void printInOrder(TreeNode* root) {
+    if (root) {
+        printInOrder(root->left);
+        cout << root->val << " ";
+        printInOrder(root->right);
+    }
+}
+
+int main() {
+    vector<int> nums = {-10, -3, 0, 5, 9}; // Example sorted array
+
+    TreeNode* root = sortedArrayToBST(nums, 0, nums.size() - 1);
+
+    cout << "In-order traversal of the BST: ";
+    printInOrder(root); // Output the tree in in-order to verify the structure
+    cout << endl;
+
+    return 0;
+}
+
