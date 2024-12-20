@@ -1,0 +1,65 @@
+Q2: Valid Sudoku
+Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
+Each row must contain the digits 1-9 without repetition. Each column must contain the digits 1-9 without repetition.
+Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
+Note:A Sudoku board (partially filled) could be valid but is not necessarily solvable.
+Only the filled cells need to be validated according to the mentioned rules.
+
+//CODE 
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+bool isValidSudoku(vector<vector<char>>& board) {
+   
+    bool rows[9][10] = {false}; // rows[i][j] is true if number j is in row i
+    bool cols[9][10] = {false}; // cols[j][i] is true if number j is in column i
+    bool boxes[9][10] = {false}; // boxes[k][j] is true if number j is in box k
+
+    for (int i = 0; i < 9; ++i) {
+        for (int j = 0; j < 9; ++j) {
+            char num = board[i][j];
+            if (num != '.') { // Only check filled cells
+                int n = num - '0'; // Convert char to int (1-9)
+                int boxIndex = (i / 3) * 3 + (j / 3); // Calculate box index
+
+                // Check for duplicates
+                if (rows[i][n] || cols[j][n] || boxes[boxIndex][n]) {
+                    return false; // Found a duplicate
+                }
+
+                // Mark the number as seen
+                rows[i][n] = true;
+                cols[j][n] = true;
+                boxes[boxIndex][n] = true;
+            }
+        }
+    }
+
+    return true; // No duplicates found, the board is valid
+}
+
+int main() {
+    // Example Sudoku board (0-9, '.' for empty cells)
+    vector<vector<char>> board = {
+        {'5', '3', '.', '.', '7', '.', '.', '.', '.'},
+        {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
+        {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
+        {'8', '.', '.', '.', '6', '.', '.', '.', '3'},
+        {'4', '.', '.', '8', '.', '3', '.', '.', '1'},
+        {'7', '.', '.', '.', '2', '.', '.', '.', '6'},
+        {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
+        {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
+        {'.', '.', '.', '.', '8', '.', '.', '7', '9'}
+    };
+
+    if (isValidSudoku(board)) {
+        cout << "The Sudoku board is valid." << endl;
+    } else {
+        cout << "The Sudoku board is not valid." << endl;
+    }
+
+    return 0;
+}
