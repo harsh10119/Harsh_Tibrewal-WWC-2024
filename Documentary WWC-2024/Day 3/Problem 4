@@ -1,0 +1,33 @@
+Q4 . Find The Winner Of Circular Game
+There are n friends that are playing a game. The friends are sitting in a circle and are numbered from 1 to n in clockwise order. More formally, moving clockwise from the ith friend brings you to the (i+1)th friend for 1 <= i < n, and moving clockwise from the nth friend brings you to the 1st friend.
+ The rules of the game are as follows:
+ Start at the 1st friend.
+Count the next k friends in the clockwise direction including the friend you started at. The counting wraps around the circle and may count some friends more than once.
+The last friend you counted leaves the circle and loses the game.
+If there is still more than one friend in the circle, go back to step 2 starting from the friend immediately clockwise of the friend who just lost and repeat.
+Else, the last friend in the circle wins the game.
+Given the number of friends, n, and an integer k, return the winner of the game.
+
+//CODE
+
+#include <iostream>
+using namespace std;
+
+int findTheWinner(int n, int k) {
+    int winner = 0; // Base case: Josephus(1, k) = 0 (0-based index)
+    
+    // Calculate the position for each number of friends from 2 to n
+    for (int i = 2; i <= n; ++i) {
+        winner = (winner + k) % i;
+    }
+    
+    // Convert to 1-based index
+    return winner + 1;
+}
+
+int main() {
+    int n = 5; // Number of friends
+    int k = 2; // Counting step
+    cout << "The winner is friend number: " << findTheWinner(n, k) << endl;
+    return 0;
+}
