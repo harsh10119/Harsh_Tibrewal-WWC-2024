@@ -1,0 +1,52 @@
+q. Elimination Game
+You have a list arr of all integers in the range [1, n] sorted in a strictly increasing order. Apply the following algorithm on arr:
+Starting from left to right, remove the first number and every other number afterward until you reach the end of the list.
+Repeat the previous step again, but this time from right to left, remove the rightmost number and every other number from the remaining numbers.
+Keep repeating the steps again, alternating left to right and right to left, until a single number remains.
+//CODE
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int lastRemaining(int n) {
+    if (n == 1) {
+        return 1;
+    }
+
+    vector<int> arr(n);
+    for (int i = 0; i < n; ++i) {
+        arr[i] = i + 1;
+    }
+
+    bool leftToRight = true;
+    while (arr.size() > 1) {
+        vector<int> nextArr;
+        if (leftToRight) {
+            for (int i = 1; i < arr.size(); i += 2) {
+                nextArr.push_back(arr[i]);
+            }
+        } else {
+            for (int i = arr.size() - 2; i >= 0; i -= 2) {
+                nextArr.push_back(arr[i]);
+            }
+            reverse(nextArr.begin(), nextArr.end()); // Important: Reverse for right-to-left
+        }
+        arr = nextArr;
+        leftToRight = !leftToRight;
+    }
+
+    return arr[0];
+}
+
+int main() {
+    cout << lastRemaining(9) << endl;    // Output: 6
+    cout << lastRemaining(1) << endl;    // Output: 1
+    cout << lastRemaining(2) << endl;    // Output: 2
+    cout << lastRemaining(10) << endl;   // Output: 8
+    cout << lastRemaining(100) << endl;  // Output: 54
+
+    return 0;
+}
