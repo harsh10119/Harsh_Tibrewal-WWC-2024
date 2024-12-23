@@ -1,0 +1,68 @@
+Q. Add Two Numbers
+You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+//CODE
+
+#include <iostream>
+
+using namespace std;
+
+struct Node {
+  int data;
+  Node* next;
+  Node(int x) : data(x), next(NULL) {}
+};
+
+// Function to print the linked list
+void printList(Node* head) {
+  while (head != NULL) {
+    cout << head->data << " ";
+    head = head->next;
+  }
+  cout << endl;
+}
+
+// Function to add two linked lists representing non-negative integers
+Node* addTwoNumbers(Node* l1, Node* l2) {
+  Node* dummy = new Node(0); // Dummy node for the result list
+  Node* curr = dummy;
+  int carry = 0;
+
+  while (l1 != NULL || l2 != NULL || carry != 0) {
+    int sum = carry;
+    if (l1 != NULL) {
+      sum += l1->data;
+      l1 = l1->next;
+    }
+    if (l2 != NULL) {
+      sum += l2->data;
+      l2 = l2->next;
+    }
+
+    carry = sum / 10;
+    curr->next = new Node(sum % 10);
+    curr = curr->next;
+  }
+
+  return dummy->next; // Skip the dummy node
+}
+
+int main() {
+  // Create first linked list: 2 -> 4 -> 3
+  Node* head1 = new Node(3);
+  head1->next = new Node(4);
+  head1->next->next = new Node(2);
+
+  // Create second linked list: 5 -> 6 -> 4
+  Node* head2 = new Node(4);
+  head2->next = new Node(6);
+  head2->next->next = new Node(5);
+
+  // Add the two linked lists
+  Node* result = addTwoNumbers(head1, head2);
+
+  // Print the result list
+  cout << "Sum: ";
+  printList(result);
+
+  return 0;
+}
