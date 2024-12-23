@@ -1,0 +1,37 @@
+Q3 . Predict The Winner
+You are given an integer array nums. Two players are playing a game with this array: player 1 and player 2.
+Player 1 and player 2 take turns, with player 1 starting first. Both players start the game with a score of 0. At each turn, the player takes one of the numbers from either end of the array (i.e., nums[0] or nums[nums.length - 1]) which reduces the size of the array by 1. The player adds the chosen number to their score. The game ends when there are no more elements in the array.
+Return true if Player 1 can win the game. If the scores of both players are equal, then player 1 is still the winner, and you should also return true. You may assume that both players are playing optimally.
+
+//CODE
+
+#include <vector>
+#include <iostream>
+using namespace std;
+
+bool PredictTheWinner(vector<int>& nums) {
+    int n = nums.size();
+    vector<vector<int>> dp(n, vector<int>(n, 0));
+
+    // Base case: when there's only one number to take
+    for (int i = 0; i < n; ++i) {
+        dp[i][i] = nums[i];
+    }
+
+    // Fill the DP table
+    for (int length = 2; length <= n; ++length) { // length of the subarray
+        for (int i = 0; i <= n - length; ++i) {
+            int j = i + length - 1; // end index of the subarray
+            dp[i][j] = max(nums[i] - dp[i + 1][j], nums[j] - dp[i][j - 1]);
+        }
+    }
+
+    // If the score difference is >= 0, Player 1 can win
+    return dp[0][n - 1] >= 0;
+}
+
+int main() {
+    vector<int> nums = {1, 5, 2};
+    cout << (PredictTheWinner(nums) ? "Player 1 wins" : "Player 2 wins") << endl;
+    return 0;
+}
