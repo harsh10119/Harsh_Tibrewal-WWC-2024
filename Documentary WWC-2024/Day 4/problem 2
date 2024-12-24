@@ -1,0 +1,74 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <string>
+
+struct Trade {
+    std::string timestamp; // Format: "YYYY-MM-DD HH:MM:SS"
+    std::string stockSymbol;
+    double tradePrice;
+    int tradeVolume;
+
+    // Constructor
+    Trade(const std::string& ts, const std::string& symbol, double price, int volume)
+        : timestamp(ts), stockSymbol(symbol), tradePrice(price), tradeVolume(volume) {}
+};
+
+// Comparator for sorting trades by timestamp
+bool compareByTimestamp(const Trade& a, const Trade& b) {
+    return a.timestamp < b.timestamp; // Ascending order
+}
+
+// Comparator for sorting trades by stock symbol
+bool compareByStockSymbol(const Trade& a, const Trade& b) {
+    return a.stockSymbol < b.stockSymbol; // Ascending order
+}
+
+// Function to group trades by stock symbol and calculate total volume
+void groupByStockSymbol(const std::vector<Trade>& trades) {
+    std::map<std::string, int> volumeMap;
+
+    for (const auto& trade : trades) {
+        volumeMap[trade.stockSymbol] += trade.tradeVolume;
+    }
+
+    std::cout << "Trading volume grouped by stock symbol:\n";
+    for (const auto& entry : volumeMap) {
+        std::cout << "Stock Symbol: " << entry.first << ", Total Volume: " << entry.second << "\n";
+    }
+}
+
+int main() {
+    // Sample trade records
+    std::vector<Trade> trades = {
+        Trade("2023-10-01 09:30:00", "AAPL", 150.00, 100),
+        Trade("2023-10-01 09:31:00", "GOOGL", 2800.00, 50),
+        Trade("2023-10-01 09:30:30", "AAPL", 151.00, 200),
+        Trade("2023-10-01 09:32:00", "MSFT", 300.00, 150),
+        Trade("2023-10-01 09:31:30", "GOOGL", 2795.00, 75),
+        Trade("2023-10-01 09:33:00", "AAPL", 152.00, 300),
+    };
+
+    // Sort trades by timestamp
+    std::sort(trades.begin(), trades.end(), compareByTimestamp);
+    std::cout << "Trades sorted by timestamp:\n";
+    for (const auto& trade : trades) {
+        std::cout << "Timestamp: " << trade.timestamp
+                  << ", Stock Symbol: " << trade.stockSymbol
+                  << ", Trade Price: " << trade.tradePrice
+                  << ", Trade Volume: " << trade.tradeVolume << "\n";
+    }
+
+    // Sort trades by stock symbol
+    std::sort(trades.begin(), trades.end(), compareByStockSymbol);
+    std::cout << "\nTrades sorted by stock symbol:\n";
+    for (const auto& trade : trades) {
+        std::cout << "Timestamp: " << trade.timestamp
+                  << ", Stock Symbol: " << trade.stockSymbol
+                  << ", Trade Price: " << trade.tradePrice
+                  << ", Trade Volume: " << trade.tradeVolume << "\n";
+    }
+
+    // Group trades by stock symbol and calculate total volume
+    groupByStockSymbol ⬤
