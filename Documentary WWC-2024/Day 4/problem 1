@@ -1,0 +1,63 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+struct Transaction {
+    int id; // Unique identifier for the transaction
+    double amount; // Size of the transaction
+    int frequency; // Frequency of transactions from the same account
+    std::string location; // Geographical location of the transaction
+    double suspiciousnessScore; // Calculated suspiciousness score
+
+    // Constructor
+    Transaction(int id, double amount, int frequency, const std::string& location)
+        : id(id), amount(amount), frequency(frequency), location(location), suspiciousnessScore(0) {}
+};
+
+// Function to calculate the suspiciousness score
+double calculateSuspiciousnessScore(const Transaction& transaction) {
+    // Example scoring logic (this can be adjusted based on actual criteria)
+    double score = 0.0;
+    score += transaction.amount > 1000 ? 1.0 : 0.0; // High amount
+    score += transaction.frequency > 5 ? 1.0 : 0.0; // High frequency
+    score += (transaction.location == "high-risk area") ? 1.0 : 0.0; // High-risk location
+    return score;
+}
+
+// Comparator function for sorting transactions by suspiciousness score
+bool compareTransactions(const Transaction& a, const Transaction& b) {
+    return a.suspiciousnessScore > b.suspiciousnessScore; // Sort in descending order
+}
+
+int main() {
+    // Sample transactions
+    std::vector<Transaction> transactions = {
+        Transaction(1, 1500, 3, "normal area"),
+        Transaction(2, 200, 10, "high-risk area"),
+        Transaction(3, 3000, 1, "normal area"),
+        Transaction(4, 500, 6, "high-risk area"),
+        Transaction(5, 700, 2, "normal area"),
+    };
+
+    // Calculate suspiciousness scores
+    for (auto& transaction : transactions) {
+        transaction.suspiciousnessScore = calculateSuspiciousnessScore(transaction);
+    }
+
+    // Sort transactions by suspiciousness score
+    std::sort(transactions.begin(), transactions.end(), compareTransactions);
+
+    // Flag high-risk transactions for review
+    std::cout << "High-risk transactions for review:\n";
+    for (const auto& transaction : transactions) {
+        if (transaction.suspiciousnessScore > 0) { // Adjust threshold as needed
+            std::cout << "Transaction ID: " << transaction.id
+                      << ", Amount: " << transaction.amount
+                      << ", Frequency: " << transaction.frequency
+                      << ", Location: " << transaction.location
+                      << ", Suspiciousness Score: " << transaction.suspiciousnessScore << "\n";
+        }
+    }
+
+    return 0;
+}
