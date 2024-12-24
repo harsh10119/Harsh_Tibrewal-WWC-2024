@@ -1,0 +1,68 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+#include <ctime>
+
+struct Patient {
+    int id; // Unique identifier for the patient
+    int triagePriority; // Lower number indicates higher priority (e.g., 1 = highest priority)
+    int severity; // Severity of condition (1-10, where 10 is most severe)
+    std::time_t arrivalTime; // Arrival time in seconds since epoch
+
+    // Constructor
+    Patient(int id, int priority, int severity, std::time_t arrival)
+        : id(id), triagePriority(priority), severity(severity), arrivalTime(arrival) {}
+};
+
+// Comparator for sorting patients by triage priority, severity, and arrival time
+bool comparePatients(const Patient& a, const Patient& b) {
+    if (a.triagePriority != b.triagePriority) {
+        return a.triagePriority < b.triagePriority; // Higher priority first
+    }
+    if (a.severity != b.severity) {
+        return a.severity > b.severity; // Higher severity first
+    }
+    return a.arrivalTime < b.arrivalTime; // Earlier arrival first
+}
+
+// Function to add a new patient and maintain the sorted order
+void addPatient(std::vector<Patient>& patients, const Patient& newPatient) {
+    patients.push_back(newPatient);
+    std::sort(patients.begin(), patients.end(), comparePatients);
+}
+
+// Function to display the list of patients
+void displayPatients(const std::vector<Patient>& patients) {
+    std::cout << "Patients sorted by triage priority, severity, and arrival time:\n";
+    for (const auto& patient : patients) {
+        std::cout << "Patient ID: " << patient.id
+                  << ", Triage Priority: " << patient.triagePriority
+                  << ", Severity: " << patient.severity
+                  << ", Arrival Time: " << std::ctime(&patient.arrivalTime);
+    }
+}
+
+int main() {
+    std::vector<Patient> patients;
+
+    // Simulate adding patients
+    std::time_t now = std::time(nullptr);
+    addPatient(patients, Patient(1, 2, 5, now)); // Patient 1
+    addPatient(patients, Patient(2, 1, 8, now + 1)); // Patient 2 (higher priority)
+    addPatient(patients, Patient(3, 3, 7, now + 2)); // Patient 3
+    addPatient(patients, Patient(4, 1, 10, now + 3)); // Patient 4 (highest severity)
+    addPatient(patients, Patient(5, 2, 6, now + 4)); // Patient 5
+
+    // Display sorted patients
+    displayPatients(patients);
+
+    // Simulate adding a new patient during peak time
+    std::cout << "\nAdding a new patient during peak time...\n";
+    addPatient(patients, Patient(6, 1, 9, now + 5)); // New Patient 6 (high priority and severity)
+
+    // Display updated sorted patients
+    displayPatients(patients);
+
+    return 0;
+}
