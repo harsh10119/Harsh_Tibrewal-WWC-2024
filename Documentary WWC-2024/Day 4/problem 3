@@ -1,0 +1,79 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+
+struct Video {
+    std::string title;
+    int totalViews; // Total views of the video
+    double userRating; // Average user rating (0.0 to 10.0)
+    int releaseYear; // Year of release
+
+    // Constructor
+    Video(const std::string& title, int views, double rating, int year)
+        : title(title), totalViews(views), userRating(rating), releaseYear(year) {}
+};
+
+// Function to calculate a score based on popularity and recency
+double calculatePopularityScore(const Video& video) {
+    // Example scoring logic: (views * rating) / (current year - release year + 1)
+    int currentYear = 2023; // Assume current year is 2023
+    return (video.totalViews * video.userRating) / (currentYear - video.releaseYear + 1);
+}
+
+// Comparator for sorting videos by popularity and recency
+bool compareByPopularity(const Video& a, const Video& b) {
+    return calculatePopularityScore(a) > calculatePopularityScore(b); // Sort in descending order
+}
+
+// Function to simulate personalized recommendations based on user history
+std::vector<Video> getPersonalizedRecommendations(const std::vector<Video>& catalog, const std::vector<std::string>& userHistory) {
+    std::vector<Video> recommendations;
+
+    // Simple logic: recommend videos that are not in the user's history
+    for (const auto& video : catalog) {
+        if (std::find(userHistory.begin(), userHistory.end(), video.title) == userHistory.end()) {
+            recommendations.push_back(video);
+        }
+    }
+
+    // Sort recommendations by popularity
+    std::sort(recommendations.begin(), recommendations.end(), compareByPopularity);
+    return recommendations;
+}
+
+int main() {
+    // Sample video catalog
+    std::vector<Video> catalog = {
+        Video("Movie A", 10000, 8.5, 2021),
+        Video("Movie B", 5000, 9.0, 2020),
+        Video("TV Show C", 20000, 7.5, 2022),
+        Video("Movie D", 15000, 8.0, 2019),
+        Video("TV Show E", 30000, 9.5, 2023),
+    };
+
+    // Sort catalog by popularity and recency
+    std::sort(catalog.begin(), catalog.end(), compareByPopularity);
+    std::cout << "Videos sorted by popularity and recency:\n";
+    for (const auto& video : catalog) {
+        std::cout << "Title: " << video.title
+                  << ", Total Views: " << video.totalViews
+                  << ", User Rating: " << video.userRating
+                  << ", Release Year: " << video.releaseYear << "\n";
+    }
+
+    // Simulate user viewing history
+    std::vector<std::string> userHistory = {"Movie A", "TV Show C"};
+
+    // Get personalized recommendations
+    std::vector<Video> recommendations = getPersonalizedRecommendations(catalog, userHistory);
+    std::cout << "\nPersonalized Recommendations:\n";
+    for (const auto& video : recommendations) {
+        std::cout << "Title: " << video.title
+                  << ", Total Views: " << video.totalViews
+                  << ", User Rating: " << video.userRating
+                  << ", Release Year: " << video.releaseYear << "\n";
+    }
+
+    return 0;
+}
