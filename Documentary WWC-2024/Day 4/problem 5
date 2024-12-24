@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <ctime>
+
+int main() {
+    std::vector<Ad> ads;
+
+    // Simulate adding ads
+    std::time_t now = std::time(nullptr);
+    addAd(ads, Ad(1, 5.00, 0.10, 100.00, now)); // Ad 1
+    addAd(ads, Ad(2, 7.00, 0.15, 150.00, now + 1)); // Ad 2
+    addAd(ads, Ad(3, 6.00, 0.20, 120.00, now + 2)); // Ad 3
+    addAd(ads, Ad(4, 8.00, 0.05, 80.00, now + 3)); // Ad 4
+    addAd(ads, Ad(5, 4.00, 0.30, 200.00, now + 4)); // Ad 5
+
+    // Display sorted ads
+    std::cout << "Ads sorted by bid amount, engagement rate, and budget:\n";
+    for (const auto& ad : ads) {
+        std::cout << "Ad ID: " << ad.id
+                  << ", Bid Amount: " << ad.bidAmount
+                  << ", Engagement Rate: " << ad.engagementRate
+                  << ", Budget: " << ad.budget
+                  << ", Scheduled Time: " << std::ctime(&ad.scheduledTime);
+    }
+
+    // Simulate adding a new ad during peak time
+    std::cout << "\nAdding a new ad during peak time...\n";
+    addAd(ads, Ad(6, 9.00, 0.25, 300.00, now + 5)); // New Ad 6
+
+    // Display updated sorted ads
+    std::cout << "Updated ads sorted by bid amount, engagement rate, and budget:\n";
+    for (const auto& ad : ads) {
+        std::cout << "Ad ID: " << ad.id
+                  << ", Bid Amount: " << ad.bidAmount
+                  << ", Engagement Rate: " << ad.engagementRate
+                  << ", Budget: " << ad.budget
+                  << ", Scheduled Time: " << std::ctime(&ad.scheduledTime);
+    }
+
+    return 0;
+}
